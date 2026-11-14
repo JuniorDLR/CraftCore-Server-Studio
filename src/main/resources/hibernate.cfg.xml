@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- Configuración de Conexión a la Base de Datos (PostgreSQL / SQL Server) -->
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/craftcore_db</property>
+        <property name="connection.username">postgres</property>
+        <property name="connection.password">postgres</property>
+
+        <!-- Dialecto Hibernate -->
+        <property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+        <!-- Pool de conexiones JDBC nativo -->
+        <property name="connection.pool_size">5</property>
+
+        <!-- Opciones de SQL -->
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+        <property name="hbm2ddl.auto">update</property>
+
+        <!-- Mapeo de Entidades JPA / Hibernate (RA4) -->
+        <mapping class="com.craftcore.model.entity.Admin"/>
+        <mapping class="com.craftcore.model.entity.Player"/>
+        <mapping class="com.craftcore.model.entity.Sanction"/>
+        <mapping class="com.craftcore.model.entity.ServerSession"/>
+        <mapping class="com.craftcore.model.entity.AuditLog"/>
+    </session-factory>
+</hibernate-configuration>
