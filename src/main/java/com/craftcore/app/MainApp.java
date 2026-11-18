@@ -32,10 +32,6 @@ public class MainApp extends Application {
                 FXMLLoader loader = new FXMLLoader(fxmlLocation);
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
-                URL cssLocation = getClass().getResource("/com/craftcore/css/styles.css");
-                if (cssLocation != null) {
-                    scene.getStylesheets().add(cssLocation.toExternalForm());
-                }
                 stage.setScene(scene);
             } else {
                 javafx.scene.layout.StackPane root = new javafx.scene.layout.StackPane();

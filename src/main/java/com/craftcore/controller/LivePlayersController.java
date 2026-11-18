@@ -7,6 +7,7 @@ import com.craftcore.util.AlertHelper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -84,21 +85,19 @@ public class LivePlayersController {
             warnItem.setOnAction(e -> applyModerationFromRow(row.getItem(), "WARN"));
 
             MenuItem opItem = new MenuItem("Otorgar OP (/op)");
-            opItem.setOnAction(e -> {
-                OnlinePlayer p = row.getItem();
-                moderationService.toggleOperator(p.getNickname(), p.getUuid(), true, context.getCurrentAdmin());
-                AlertHelper.showInfo("OP otorgado", "Se ejecutó /op para " + p.getNickname());
-            });
+            opItem.setOnAction(e -> toggleOpForPlayer(row.getItem().getNickname(), row.getItem().getUuid(), true));
+
+            MenuItem deopItem = new MenuItem("Quitar OP (/deop)");
+            deopItem.setOnAction(e -> toggleOpForPlayer(row.getItem().getNickname(), row.getItem().getUuid(), false));
 
             MenuItem survivalItem = new MenuItem("Gamemode Survival");
-            survivalItem.setOnAction(e -> moderationService.changeGamemode(
-                    row.getItem().getNickname(), "survival", context.getCurrentAdmin()));
+            survivalItem.setOnAction(e -> setGamemodeForPlayer(row.getItem().getNickname(), "survival"));
 
             MenuItem creativeItem = new MenuItem("Gamemode Creative");
-            creativeItem.setOnAction(e -> moderationService.changeGamemode(
-                    row.getItem().getNickname(), "creative", context.getCurrentAdmin()));
+            creativeItem.setOnAction(e -> setGamemodeForPlayer(row.getItem().getNickname(), "creative"));
 
-            menu.getItems().addAll(kickItem, banItem, warnItem, new SeparatorMenuItem(), opItem, survivalItem, creativeItem);
+            menu.getItems().addAll(kickItem, banItem, warnItem, new SeparatorMenuItem(),
+                    opItem, deopItem, new SeparatorMenuItem(), survivalItem, creativeItem);
 
             row.contextMenuProperty().bind(
                     javafx.beans.binding.Bindings.when(row.emptyProperty())
@@ -118,6 +117,26 @@ public class LivePlayersController {
     }
 
     @FXML
+    private void handleQuickGamemode(ActionEvent event) {
+        if (event.getSource() instanceof MenuItem item && item.getUserData() instanceof String gamemode) {
+            String target = resolveTargetPlayer();
+            if (target != null) {
+                setGamemodeForPlayer(target, gamemode);
+            }
+        }
+    }
+
+    @FXML
+    private void handleQuickOperator(ActionEvent event) {
+        if (event.getSource() instanceof MenuItem item && item.getUserData() instanceof String grantStr) {
+            String target = resolveTargetPlayer();
+            if (target != null) {
+                toggleOpForPlayer(target, resolveSelectedUuid(target), Boolean.parseBoolean(grantStr));
+            }
+        }
+    }
+
+    @FXML
     private void handleQuickKick() {
         applyQuickSanction("KICK");
     }
@@ -133,19 +152,41 @@ public class LivePlayersController {
     }
 
     private void applyQuickSanction(String tipo) {
-        String target = txtTargetPlayer.getText() == null ? "" : txtTargetPlayer.getText().trim();
-        if (target.isEmpty()) {
-            AlertHelper.showWarning("Jugador requerido", "Ingresá o seleccioná el nickname del jugador.");
+        String target = resolveTargetPlayer();
+        if (target == null) {
             return;
         }
         String reason = txtReason.getText() == null || txtReason.getText().isBlank()
                 ? "Moderación administrativa"
                 : txtReason.getText().trim();
 
-        OnlinePlayer selected = tblOnlinePlayers.getSelectionModel().getSelectedItem();
-        String uuid = (selected != null && selected.getNickname().equalsIgnoreCase(target)) ? selected.getUuid() : null;
-        executeSanction(target, uuid, tipo, reason);
+        executeSanction(target, resolveSelectedUuid(target), tipo, reason);
         txtReason.clear();
+    }
+
+    private String resolveTargetPlayer() {
+        String target = txtTargetPlayer.getText() == null ? "" : txtTargetPlayer.getText().trim();
+        if (target.isEmpty()) {
+            AlertHelper.showWarning("Jugador requerido", "Seleccioná un jugador de la tabla o escribí su nickname.");
+            return null;
+        }
+        return target;
+    }
+
+    private String resolveSelectedUuid(String target) {
+        OnlinePlayer selected = tblOnlinePlayers.getSelectionModel().getSelectedItem();
+        return (selected != null && selected.getNickname().equalsIgnoreCase(target)) ? selected.getUuid() : null;
+    }
+
+    private void setGamemodeForPlayer(String nickname, String gamemode) {
+        moderationService.changeGamemode(nickname, gamemode, context.getCurrentAdmin());
+        AlertHelper.showInfo("Modo de juego actualizado", nickname + " ahora está en modo " + gamemode + ".");
+    }
+
+    private void toggleOpForPlayer(String nickname, String uuid, boolean grantOp) {
+        moderationService.toggleOperator(nickname, uuid, grantOp, context.getCurrentAdmin());
+        AlertHelper.showInfo("Permisos actualizados",
+                (grantOp ? "Se otorgó OP a " : "Se quitó OP a ") + nickname + ".");
     }
 
     private void executeSanction(String nickname, String uuid, String tipo, String reason) {

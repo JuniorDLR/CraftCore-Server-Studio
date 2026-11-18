@@ -9,11 +9,13 @@ import com.craftcore.service.MinecraftProcessService;
 import com.craftcore.service.MinecraftProcessService.ServerState;
 import com.craftcore.util.AlertHelper;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
@@ -66,12 +68,18 @@ public class DashboardController {
         onServerStateChanged(processService.getCurrentState());
     }
 
+    private static final String NAV_IDLE_STYLE =
+            "-fx-background-color: #1e293b; -fx-text-fill: #e2e8f0; -fx-background-radius: 8; -fx-padding: 6 12; -fx-cursor: hand;";
+    private static final String NAV_ACTIVE_STYLE =
+            "-fx-background-color: #6366f1; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 6 12; -fx-cursor: hand;";
+    private static final String BADGE_BASE_STYLE =
+            "-fx-padding: 5 12; -fx-background-radius: 14; -fx-font-weight: bold; -fx-font-size: 12px; ";
+
     private void onServerStateChanged(ServerState state) {
-        lblServerState.getStyleClass().removeAll("status-stopped", "status-starting", "status-running", "status-crashed");
         switch (state) {
             case STOPPED -> {
                 lblServerState.setText("DETENIDO");
-                lblServerState.getStyleClass().add("status-stopped");
+                lblServerState.setStyle(BADGE_BASE_STYLE + "-fx-background-color: #334155; -fx-text-fill: #e2e8f0;");
                 btnStart.setDisable(false);
                 btnStop.setDisable(true);
                 btnRestart.setDisable(true);
@@ -79,28 +87,28 @@ public class DashboardController {
             }
             case STARTING -> {
                 lblServerState.setText("INICIANDO...");
-                lblServerState.getStyleClass().add("status-starting");
+                lblServerState.setStyle(BADGE_BASE_STYLE + "-fx-background-color: #f59e0b; -fx-text-fill: #0f172a;");
                 btnStart.setDisable(true);
                 btnStop.setDisable(false);
                 btnRestart.setDisable(true);
             }
             case RUNNING -> {
                 lblServerState.setText("EN LÍNEA");
-                lblServerState.getStyleClass().add("status-running");
+                lblServerState.setStyle(BADGE_BASE_STYLE + "-fx-background-color: #10b981; -fx-text-fill: #022c22;");
                 btnStart.setDisable(true);
                 btnStop.setDisable(false);
                 btnRestart.setDisable(false);
             }
             case STOPPING -> {
                 lblServerState.setText("DETENIENDO...");
-                lblServerState.getStyleClass().add("status-starting");
+                lblServerState.setStyle(BADGE_BASE_STYLE + "-fx-background-color: #f59e0b; -fx-text-fill: #0f172a;");
                 btnStart.setDisable(true);
                 btnStop.setDisable(true);
                 btnRestart.setDisable(true);
             }
             case CRASHED -> {
                 lblServerState.setText("ERROR / CRASH");
-                lblServerState.getStyleClass().add("status-crashed");
+                lblServerState.setStyle(BADGE_BASE_STYLE + "-fx-background-color: #ef4444; -fx-text-fill: #ffffff;");
                 btnStart.setDisable(false);
                 btnStop.setDisable(true);
                 btnRestart.setDisable(true);
@@ -164,29 +172,37 @@ public class DashboardController {
     }
 
     @FXML
+    private void handleQuickMenuCommand(ActionEvent event) {
+        if (event.getSource() instanceof MenuItem item && item.getUserData() instanceof String cmd) {
+            executeQuickCommand(cmd);
+        }
+    }
+
+    @FXML
     private void handleQuickSave() {
-        processService.sendCommand("save-all");
-    }
-
-    @FXML
-    private void handleQuickDay() {
-        processService.sendCommand("time set day");
-    }
-
-    @FXML
-    private void handleQuickWeather() {
-        processService.sendCommand("weather clear");
+        executeQuickCommand("save-all");
     }
 
     @FXML
     private void handleQuickList() {
-        processService.sendCommand("list");
+        executeQuickCommand("list");
+    }
+
+    @FXML
+    private void handleQuickWhitelistReload() {
+        executeQuickCommand("whitelist reload");
     }
 
     @FXML
     private void handleQuickBroadcast() {
         AlertHelper.showTextInput("Anuncio Global", "Mensaje para todos los jugadores (/say):", "")
-                .ifPresent(msg -> processService.sendCommand("say " + msg));
+                .ifPresent(msg -> executeQuickCommand("say " + msg));
+    }
+
+    private void executeQuickCommand(String command) {
+        processService.sendCommand(command);
+        txtConsole.appendText("> " + command + "\n");
+        context.getModerationService().logAudit(context.getCurrentAdmin(), "EJECUCION_COMANDO", command);
     }
 
     @FXML
@@ -260,10 +276,10 @@ public class DashboardController {
 
     private void setActiveNav(Button activeBtn) {
         for (Button btn : List.of(navDashboard, navModeration, navWhitelist, navAudit, navReports)) {
-            btn.getStyleClass().remove("nav-button-active");
+            btn.setStyle(NAV_IDLE_STYLE);
         }
-        if (activeBtn != null && !activeBtn.getStyleClass().contains("nav-button-active")) {
-            activeBtn.getStyleClass().add("nav-button-active");
+        if (activeBtn != null) {
+            activeBtn.setStyle(NAV_ACTIVE_STYLE);
         }
     }
 
