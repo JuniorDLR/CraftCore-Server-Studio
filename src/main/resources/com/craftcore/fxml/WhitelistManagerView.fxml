@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.craftcore.controller.WhitelistController" spacing="12">
+
+    <Label text="Gestión de Whitelist y Validación Mojang REST API" styleClass="section-title"/>
+
+    <HBox spacing="12" styleClass="card-panel" alignment="CENTER_LEFT">
+        <VBox spacing="8" HBox.hgrow="ALWAYS">
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <TextField fx:id="txtUsername" promptText="Nickname oficial de Minecraft (ej: Notch, Jeb_)"
+                           HBox.hgrow="ALWAYS" onAction="#handleLookupMojang"/>
+                <Button fx:id="btnLookup" text="Consultar Mojang API" onAction="#handleLookupMojang" styleClass="btn-primary"/>
+            </HBox>
+            <HBox spacing="16" alignment="CENTER_LEFT">
+                <Label fx:id="lblProfileName" text="Jugador: —" style="-fx-font-weight: bold;"/>
+                <Label fx:id="lblProfileUuid" text="UUID: —" style="-fx-text-fill: #94a3b8;"/>
+            </HBox>
+            <HBox spacing="8">
+                <Button fx:id="btnAddWhitelist" text="Agregar a Whitelist" onAction="#handleAddToWhitelist"
+                        styleClass="btn-success" disable="true"/>
+                <Button text="Recargar whitelist.json" onAction="#loadWhitelistTable" styleClass="nav-button"/>
+            </HBox>
+        </VBox>
+
+        <VBox alignment="CENTER" spacing="4" prefWidth="110" styleClass="card-panel">
+            <ImageView fx:id="imgSkin" fitWidth="72" fitHeight="72" preserveRatio="true"/>
+            <Label text="Avatar / Skin" style="-fx-font-size: 11px; -fx-text-fill: #94a3b8;"/>
+        </VBox>
+    </HBox>
+
+    <TableView fx:id="tblWhitelist" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colName" text="Nickname" prefWidth="240"/>
+            <TableColumn fx:id="colUuid" text="UUID (whitelist.json)" prefWidth="420"/>
+        </columns>
+        <placeholder>
+            <Label text="No hay jugadores registrados en whitelist.json."/>
+        </placeholder>
+    </TableView>
+
+    <HBox spacing="8" alignment="CENTER_RIGHT">
+        <Button text="Eliminar seleccionado de Whitelist" onAction="#handleRemoveSelected" styleClass="btn-danger"/>
+    </HBox>
+
+</VBox>

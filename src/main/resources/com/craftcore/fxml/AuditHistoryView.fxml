@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.craftcore.controller.AuditHistoryController" spacing="10">
+
+    <Label text="Historial de Sanciones (Hibernate) y Auditoría (JDBC)" styleClass="section-title"/>
+
+    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <Tab text="Historial de Sanciones (ORM)">
+            <VBox spacing="10" style="-fx-padding: 10 0 0 0;">
+                <HBox spacing="8" alignment="CENTER_LEFT" styleClass="card-panel">
+                    <Label text="Desde:"/>
+                    <DatePicker fx:id="dpSanctionDesde" prefWidth="135"/>
+                    <Label text="Hasta:"/>
+                    <DatePicker fx:id="dpSanctionHasta" prefWidth="135"/>
+                    <Label text="Tipo:"/>
+                    <ComboBox fx:id="cmbSanctionTipo" prefWidth="120"/>
+                    <Button text="Filtrar" onAction="#loadSanctions" styleClass="btn-primary"/>
+                    <Button text="Limpiar" onAction="#clearSanctionFilters" styleClass="nav-button"/>
+                </HBox>
+
+                <TableView fx:id="tblSanctions" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colSanctionId" text="ID" prefWidth="55"/>
+                        <TableColumn fx:id="colSanctionPlayer" text="Jugador" prefWidth="140"/>
+                        <TableColumn fx:id="colSanctionTipo" text="Tipo" prefWidth="85"/>
+                        <TableColumn fx:id="colSanctionMotivo" text="Motivo" prefWidth="250"/>
+                        <TableColumn fx:id="colSanctionEstado" text="Estado" prefWidth="100"/>
+                        <TableColumn fx:id="colSanctionAdmin" text="Operador" prefWidth="120"/>
+                        <TableColumn fx:id="colSanctionFecha" text="Fecha" prefWidth="160"/>
+                    </columns>
+                </TableView>
+
+                <HBox spacing="8" alignment="CENTER_RIGHT">
+                    <Button text="Revocar Sanción" onAction="#handleRevokeSanction" styleClass="btn-warning"/>
+                    <Button text="Eliminar Registro" onAction="#handleDeleteSanction" styleClass="btn-danger"/>
+                </HBox>
+            </VBox>
+        </Tab>
+
+        <Tab text="Logs de Auditoría (JDBC)">
+            <VBox spacing="10" style="-fx-padding: 10 0 0 0;">
+                <HBox spacing="8" alignment="CENTER_LEFT" styleClass="card-panel">
+                    <Label text="Desde:"/>
+                    <DatePicker fx:id="dpLogDesde" prefWidth="135"/>
+                    <Label text="Hasta:"/>
+                    <DatePicker fx:id="dpLogHasta" prefWidth="135"/>
+                    <Label text="Acción:"/>
+                    <ComboBox fx:id="cmbLogAccion" prefWidth="170"/>
+                    <Button text="Consultar JDBC" onAction="#loadAuditLogs" styleClass="btn-primary"/>
+                    <Button text="Limpiar" onAction="#clearLogFilters" styleClass="nav-button"/>
+                </HBox>
+
+                <TableView fx:id="tblAuditLogs" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colLogId" text="ID" prefWidth="60"/>
+                        <TableColumn fx:id="colLogAccion" text="Acción" prefWidth="170"/>
+                        <TableColumn fx:id="colLogDetalle" text="Detalle" prefWidth="420"/>
+                        <TableColumn fx:id="colLogAdmin" text="Admin" prefWidth="120"/>
+                        <TableColumn fx:id="colLogFecha" text="Fecha" prefWidth="160"/>
+                    </columns>
+                </TableView>
+
+                <HBox spacing="8" alignment="CENTER_RIGHT">
+                    <Button text="Agregar Nota Manual" onAction="#handleAddManualLog" styleClass="btn-success"/>
+                    <Button text="Eliminar Log" onAction="#handleDeleteLog" styleClass="btn-danger"/>
+                </HBox>
+            </VBox>
+        </Tab>
+    </TabPane>
+
+</VBox>

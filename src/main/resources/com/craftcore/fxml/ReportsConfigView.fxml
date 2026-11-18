@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.craftcore.controller.ReportsConfigController" spacing="14">
+
+    <Label text="Reportes JasperReports y Configuración del Servidor" styleClass="section-title"/>
+
+    <VBox spacing="10" styleClass="card-panel">
+        <Label text="Exportación de Reportes (JasperReports)" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+        <HBox spacing="12" alignment="CENTER_LEFT">
+            <Label text="Tipo de reporte:"/>
+            <ComboBox fx:id="cmbReportType" prefWidth="220"/>
+            <Label text="Desde:"/>
+            <DatePicker fx:id="dpReportDesde" prefWidth="135"/>
+            <Label text="Hasta:"/>
+            <DatePicker fx:id="dpReportHasta" prefWidth="135"/>
+        </HBox>
+        <HBox spacing="16" alignment="CENTER_LEFT">
+            <Label text="Formato:"/>
+            <RadioButton fx:id="rbPdf" text="PDF (.pdf)" selected="true">
+                <toggleGroup>
+                    <ToggleGroup fx:id="exportFormatGroup"/>
+                </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="rbExcel" text="Excel (.xlsx)" toggleGroup="$exportFormatGroup"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Exportar Reporte..." onAction="#handleExportReport" styleClass="btn-primary"/>
+        </HBox>
+    </VBox>
+
+    <VBox spacing="10" styleClass="card-panel" VBox.vgrow="ALWAYS">
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Editor de server.properties" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Recargar" onAction="#loadServerProperties" styleClass="nav-button"/>
+            <Button text="Guardar Cambios" onAction="#handleSaveProperties" styleClass="btn-success"/>
+        </HBox>
+
+        <GridPane hgap="14" vgap="10">
+            <columnConstraints>
+                <ColumnConstraints prefWidth="160"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+                <ColumnConstraints prefWidth="160"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <Label text="MOTD (Descripción):" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtMotd" promptText="Un servidor de Minecraft" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="3"/>
+
+            <Label text="Puerto (server-port):" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="txtPort" promptText="25565" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Máx. Jugadores:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+            <TextField fx:id="txtMaxPlayers" promptText="20" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+            <Label text="Modo de Juego:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="cmbGamemode" maxWidth="Infinity" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="Dificultad:" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+            <ComboBox fx:id="cmbDifficulty" maxWidth="Infinity" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+
+            <HBox spacing="24" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="4" style="-fx-padding: 6 0 0 0;">
+                <CheckBox fx:id="chkWhitelist" text="Activar Whitelist (white-list=true)"/>
+                <CheckBox fx:id="chkPvp" text="Permitir PvP (pvp=true)"/>
+                <CheckBox fx:id="chkOnlineMode" text="Modo Premium Mojang (online-mode=true)"/>
+            </HBox>
+        </GridPane>
+    </VBox>
+
+</VBox>

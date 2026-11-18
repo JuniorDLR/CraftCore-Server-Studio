@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.craftcore.controller.DashboardController">
+
+    <top>
+        <VBox>
+            <MenuBar>
+                <Menu text="Archivo">
+                    <MenuItem text="Seleccionar carpeta del servidor..." onAction="#handleSelectServerFolder"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Salir" onAction="#handleExit"/>
+                </Menu>
+                <Menu text="Vistas">
+                    <MenuItem text="1. Dashboard &amp; Consola" onAction="#showDashboard"/>
+                    <MenuItem text="2. Moderación en Vivo" onAction="#showLiveModeration"/>
+                    <MenuItem text="3. Whitelist &amp; Mojang" onAction="#showWhitelist"/>
+                    <MenuItem text="4. Auditoría &amp; Sanciones" onAction="#showAuditHistory"/>
+                    <MenuItem text="5. Reportes &amp; Configuración" onAction="#showReportsConfig"/>
+                </Menu>
+                <Menu text="Ayuda">
+                    <MenuItem text="Acerca de CraftCore" onAction="#handleAbout"/>
+                </Menu>
+            </MenuBar>
+
+            <ToolBar>
+                <Label text="Estado:" style="-fx-font-weight: bold;"/>
+                <Label fx:id="lblServerState" text="DETENIDO" styleClass="status-badge, status-stopped"/>
+                <Separator orientation="VERTICAL"/>
+                <Button fx:id="btnStart" text="▶ Iniciar" onAction="#handleStartServer" styleClass="btn-success"/>
+                <Button fx:id="btnStop" text="■ Detener" onAction="#handleStopServer" styleClass="btn-danger" disable="true"/>
+                <Button fx:id="btnRestart" text="↻ Reiniciar" onAction="#handleRestartServer" styleClass="btn-warning" disable="true"/>
+                <Separator orientation="VERTICAL"/>
+                <Button fx:id="navDashboard" text="Consola" onAction="#showDashboard" styleClass="nav-button, nav-button-active"/>
+                <Button fx:id="navModeration" text="Moderación" onAction="#showLiveModeration" styleClass="nav-button"/>
+                <Button fx:id="navWhitelist" text="Whitelist" onAction="#showWhitelist" styleClass="nav-button"/>
+                <Button fx:id="navAudit" text="Auditoría" onAction="#showAuditHistory" styleClass="nav-button"/>
+                <Button fx:id="navReports" text="Reportes &amp; Config" onAction="#showReportsConfig" styleClass="nav-button"/>
+            </ToolBar>
+        </VBox>
+    </top>
+
+    <center>
+        <StackPane fx:id="contentArea">
+            <padding>
+                <Insets top="12" right="14" bottom="12" left="14"/>
+            </padding>
+
+            <VBox fx:id="dashboardPanel" spacing="10">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Consola en Vivo del Servidor" styleClass="section-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="lblServerPath" text="Ruta: minecraft-server/server.jar" style="-fx-text-fill: #94a3b8;"/>
+                </HBox>
+
+                <TextArea fx:id="txtConsole" editable="false" wrapText="true" VBox.vgrow="ALWAYS"
+                          styleClass="console-area"
+                          promptText="La salida de la consola de Minecraft aparecerá aquí..."/>
+
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <TextField fx:id="txtCommand" HBox.hgrow="ALWAYS" onAction="#handleSendCommand"
+                               promptText="Escribir comando (ej: say Hola, list, whitelist reload, op Steve)..."/>
+                    <Button text="Enviar Comando" onAction="#handleSendCommand" styleClass="btn-primary"/>
+                    <Button text="Limpiar Consola" onAction="#handleClearConsole" styleClass="nav-button"/>
+                </HBox>
+
+                <HBox spacing="8" alignment="CENTER_LEFT" styleClass="card-panel">
+                    <Label text="Acciones rápidas:" style="-fx-font-weight: bold;"/>
+                    <Button text="Guardar Mundo (/save-all)" onAction="#handleQuickSave" styleClass="nav-button"/>
+                    <Button text="Hacer de Día (/time set day)" onAction="#handleQuickDay" styleClass="nav-button"/>
+                    <Button text="Despejar Clima (/weather clear)" onAction="#handleQuickWeather" styleClass="nav-button"/>
+                    <Button text="Listar Jugadores (/list)" onAction="#handleQuickList" styleClass="nav-button"/>
+                    <Button text="Anuncio Global (/say)" onAction="#handleQuickBroadcast" styleClass="nav-button"/>
+                </HBox>
+            </VBox>
+        </StackPane>
+    </center>
+
+</BorderPane>

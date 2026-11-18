@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.craftcore.controller.LivePlayersController" spacing="12">
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Moderación en Vivo — Jugadores Conectados" styleClass="section-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="lblOnlineCount" text="0 jugadores en línea" style="-fx-text-fill: #94a3b8;"/>
+    </HBox>
+
+    <HBox spacing="8" alignment="CENTER_LEFT" styleClass="card-panel">
+        <Label text="Moderación rápida:"/>
+        <TextField fx:id="txtTargetPlayer" promptText="Nickname del jugador" prefWidth="180"/>
+        <TextField fx:id="txtReason" promptText="Motivo de sanción" HBox.hgrow="ALWAYS"/>
+        <Button text="Kick" onAction="#handleQuickKick" styleClass="btn-warning"/>
+        <Button text="Ban" onAction="#handleQuickBan" styleClass="btn-danger"/>
+        <Button text="Warn" onAction="#handleQuickWarn" styleClass="btn-primary"/>
+    </HBox>
+
+    <TableView fx:id="tblOnlinePlayers" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colAvatar" text="Avatar" prefWidth="70"/>
+            <TableColumn fx:id="colNickname" text="Jugador" prefWidth="180"/>
+            <TableColumn fx:id="colUuid" text="UUID" prefWidth="320"/>
+            <TableColumn fx:id="colPing" text="Ping (ms)" prefWidth="100"/>
+        </columns>
+        <placeholder>
+            <Label text="No hay jugadores conectados en este momento. Usá clic derecho sobre un jugador cuando se conecte, o usá la barra superior."/>
+        </placeholder>
+    </TableView>
+
+</VBox>
