@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.craftcore.controller.DashboardController"
+            style="-fx-base: #1e293b; -fx-background: #0f172a; -fx-control-inner-background: #0f172a; -fx-accent: #38bdf8; -fx-focus-color: #38bdf8; -fx-background-color: #0f172a; -fx-font-family: 'Segoe UI', system-ui, sans-serif; -fx-font-size: 13px;">
+
+    <top>
+        <VBox>
+            <MenuBar style="-fx-background-color: #0f172a; -fx-border-color: #1e293b; -fx-border-width: 0 0 1 0;">
+                <Menu text="Archivo" style="-fx-text-fill: #e2e8f0;">
+                    <MenuItem text="Seleccionar carpeta del servidor..." onAction="#handleSelectServerFolder"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Salir" onAction="#handleExit"/>
+                </Menu>
+                <Menu text="Vistas" style="-fx-text-fill: #e2e8f0;">
+                    <MenuItem text="1. Dashboard &amp; Consola" onAction="#showDashboard"/>
+                    <MenuItem text="2. Moderación en Vivo" onAction="#showLiveModeration"/>
+                    <MenuItem text="3. Whitelist &amp; Mojang" onAction="#showWhitelist"/>
+                    <MenuItem text="4. Auditoría &amp; Sanciones" onAction="#showAuditHistory"/>
+                    <MenuItem text="5. Reportes &amp; Configuración" onAction="#showReportsConfig"/>
+                </Menu>
+                <Menu text="Ayuda" style="-fx-text-fill: #e2e8f0;">
+                    <MenuItem text="Acerca de CraftCore" onAction="#handleAbout"/>
+                </Menu>
+            </MenuBar>
+
+            <ToolBar style="-fx-background-color: #111827; -fx-border-color: #1e293b; -fx-border-width: 0 0 1 0; -fx-padding: 10 14; -fx-spacing: 8;">
+                <Label text="Estado:" style="-fx-font-weight: bold; -fx-text-fill: #cbd5e1;"/>
+                <Label fx:id="lblServerState" text="DETENIDO"
+                       style="-fx-padding: 5 12; -fx-background-radius: 14; -fx-font-weight: bold; -fx-font-size: 12px; -fx-background-color: #334155; -fx-text-fill: #e2e8f0;"/>
+                <Separator orientation="VERTICAL"/>
+                <Button fx:id="btnStart" text="▶ Iniciar" onAction="#handleStartServer"
+                        style="-fx-background-color: #10b981; -fx-text-fill: #022c22; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 6 14; -fx-cursor: hand;"/>
+                <Button fx:id="btnStop" text="■ Detener" onAction="#handleStopServer" disable="true"
+                        style="-fx-background-color: #ef4444; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 6 14; -fx-cursor: hand;"/>
+                <Button fx:id="btnRestart" text="↻ Reiniciar" onAction="#handleRestartServer" disable="true"
+                        style="-fx-background-color: #f59e0b; -fx-text-fill: #0f172a; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 6 14; -fx-cursor: hand;"/>
+                <Separator orientation="VERTICAL"/>
+                <Button fx:id="navDashboard" text="Consola" onAction="#showDashboard"
+                        style="-fx-background-color: #6366f1; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 6 12; -fx-cursor: hand;"/>
+                <Button fx:id="navModeration" text="Moderación" onAction="#showLiveModeration"
+                        style="-fx-background-color: #1e293b; -fx-text-fill: #e2e8f0; -fx-background-radius: 8; -fx-padding: 6 12; -fx-cursor: hand;"/>
+                <Button fx:id="navWhitelist" text="Whitelist" onAction="#showWhitelist"
+                        style="-fx-background-color: #1e293b; -fx-text-fill: #e2e8f0; -fx-background-radius: 8; -fx-padding: 6 12; -fx-cursor: hand;"/>
+                <Button fx:id="navAudit" text="Auditoría" onAction="#showAuditHistory"
+                        style="-fx-background-color: #1e293b; -fx-text-fill: #e2e8f0; -fx-background-radius: 8; -fx-padding: 6 12; -fx-cursor: hand;"/>
+                <Button fx:id="navReports" text="Reportes &amp; Config" onAction="#showReportsConfig"
+                        style="-fx-background-color: #1e293b; -fx-text-fill: #e2e8f0; -fx-background-radius: 8; -fx-padding: 6 12; -fx-cursor: hand;"/>
+            </ToolBar>
+        </VBox>
+    </top>
+
+    <center>
+        <StackPane fx:id="contentArea" style="-fx-background-color: #0b1120;">
+            <padding>
+                <Insets top="14" right="16" bottom="14" left="16"/>
+            </padding>
+
+            <VBox fx:id="dashboardPanel" spacing="12">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Consola en Vivo del Servidor"
+                           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #f8fafc;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="lblServerPath" text="Ruta: minecraft-server/server.jar"
+                           style="-fx-text-fill: #38bdf8; -fx-font-size: 12px; -fx-background-color: #1e293b; -fx-padding: 4 10; -fx-background-radius: 10;"/>
+                </HBox>
+
+                <TextArea fx:id="txtConsole" editable="false" wrapText="true" VBox.vgrow="ALWAYS"
+                          style="-fx-font-family: 'Consolas', 'Courier New', monospace; -fx-font-size: 12.5px; -fx-control-inner-background: #020617; -fx-text-fill: #e2e8f0; -fx-border-color: #334155; -fx-border-radius: 8; -fx-background-radius: 8;"
+                          promptText="La salida de la consola de Minecraft aparecerá aquí..."/>
+
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <TextField fx:id="txtCommand" HBox.hgrow="ALWAYS" onAction="#handleSendCommand"
+                               style="-fx-background-color: #0f172a; -fx-text-fill: #f8fafc; -fx-prompt-text-fill: #64748b; -fx-border-color: #334155; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 12;"
+                               promptText="Comando avanzado opcional (ej: gamerule, tp, say)..."/>
+                    <Button text="Enviar Comando" onAction="#handleSendCommand"
+                            style="-fx-background-color: #38bdf8; -fx-text-fill: #082f49; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 8 16; -fx-cursor: hand;"/>
+                    <Button text="Limpiar" onAction="#handleClearConsole"
+                            style="-fx-background-color: #1e293b; -fx-text-fill: #cbd5e1; -fx-background-radius: 8; -fx-padding: 8 14; -fx-cursor: hand;"/>
+                </HBox>
+
+                <VBox spacing="10" style="-fx-background-color: #111827; -fx-background-radius: 10; -fx-border-color: #1e293b; -fx-border-radius: 10; -fx-padding: 14;">
+                    <Label text="Centro de Control Rápido (1 Clic)" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #38bdf8;"/>
+                    <FlowPane hgap="10" vgap="10">
+                        <MenuButton text="☀ Clima" style="-fx-background-color: #1e293b; -fx-border-color: #38bdf8; -fx-border-radius: 8; -fx-background-radius: 8; -fx-cursor: hand;">
+                            <items>
+                                <MenuItem text="Despejado (Clear)" userData="weather clear" onAction="#handleQuickMenuCommand"/>
+                                <MenuItem text="Lluvioso (Rain)" userData="weather rain" onAction="#handleQuickMenuCommand"/>
+                                <MenuItem text="Tormenta Eléctrica (Thunder)" userData="weather thunder" onAction="#handleQuickMenuCommand"/>
+                            </items>
+                        </MenuButton>
+
+                        <MenuButton text="🕒 Hora del Mundo" style="-fx-background-color: #1e293b; -fx-border-color: #38bdf8; -fx-border-radius: 8; -fx-background-radius: 8; -fx-cursor: hand;">
+                            <items>
+                                <MenuItem text="Amanecer (Day)" userData="time set day" onAction="#handleQuickMenuCommand"/>
+                                <MenuItem text="Mediodía (Noon)" userData="time set noon" onAction="#handleQuickMenuCommand"/>
+                                <MenuItem text="Atardecer (Sunset)" userData="time set sunset" onAction="#handleQuickMenuCommand"/>
+                                <MenuItem text="Medianoche (Midnight)" userData="time set midnight" onAction="#handleQuickMenuCommand"/>
+                            </items>
+                        </MenuButton>
+
+                        <MenuButton text="⚔ Dificultad" style="-fx-background-color: #1e293b; -fx-border-color: #a855f7; -fx-border-radius: 8; -fx-background-radius: 8; -fx-cursor: hand;">
+                            <items>
+                                <MenuItem text="Pacífico (Peaceful)" userData="difficulty peaceful" onAction="#handleQuickMenuCommand"/>
+                                <MenuItem text="Fácil (Easy)" userData="difficulty easy" onAction="#handleQuickMenuCommand"/>
+                                <MenuItem text="Normal (Normal)" userData="difficulty normal" onAction="#handleQuickMenuCommand"/>
+                                <MenuItem text="Difícil (Hard)" userData="difficulty hard" onAction="#handleQuickMenuCommand"/>
+                            </items>
+                        </MenuButton>
+
+                        <MenuButton text="🎮 Modo Global (@a)" style="-fx-background-color: #1e293b; -fx-border-color: #a855f7; -fx-border-radius: 8; -fx-background-radius: 8; -fx-cursor: hand;">
+                            <items>
+                                <MenuItem text="Todos a Supervivencia" userData="gamemode survival @a" onAction="#handleQuickMenuCommand"/>
+                                <MenuItem text="Todos a Creativo" userData="gamemode creative @a" onAction="#handleQuickMenuCommand"/>
+                                <MenuItem text="Todos a Aventura" userData="gamemode adventure @a" onAction="#handleQuickMenuCommand"/>
+                            </items>
+                        </MenuButton>
+
+                        <MenuButton text="📜 Reglas del Mundo" style="-fx-background-color: #1e293b; -fx-border-color: #10b981; -fx-border-radius: 8; -fx-background-radius: 8; -fx-cursor: hand;">
+                            <items>
+                                <MenuItem text="Conservar Inventario: ACTIVAR" userData="gamerule keepInventory true" onAction="#handleQuickMenuCommand"/>
+                                <MenuItem text="Conservar Inventario: DESACTIVAR" userData="gamerule keepInventory false" onAction="#handleQuickMenuCommand"/>
+                                <SeparatorMenuItem/>
+                                <MenuItem text="Ciclo Día/Noche: ACTIVAR" userData="gamerule doDaylightCycle true" onAction="#handleQuickMenuCommand"/>
+                                <MenuItem text="Ciclo Día/Noche: PAUSAR" userData="gamerule doDaylightCycle false" onAction="#handleQuickMenuCommand"/>
+                                <SeparatorMenuItem/>
+                                <MenuItem text="Daño de Mobs/TNT (mobGriefing): NO" userData="gamerule mobGriefing false" onAction="#handleQuickMenuCommand"/>
+                                <MenuItem text="Daño de Mobs/TNT (mobGriefing): SÍ" userData="gamerule mobGriefing true" onAction="#handleQuickMenuCommand"/>
+                            </items>
+                        </MenuButton>
+
+                        <Button text="💾 Guardar Mundo" onAction="#handleQuickSave"
+                                style="-fx-background-color: #10b981; -fx-text-fill: #022c22; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 6 14; -fx-cursor: hand;"/>
+                        <Button text="📢 Anuncio Global" onAction="#handleQuickBroadcast"
+                                style="-fx-background-color: #6366f1; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 6 14; -fx-cursor: hand;"/>
+                        <Button text="👥 Ver Conectados" onAction="#handleQuickList"
+                                style="-fx-background-color: #1e293b; -fx-text-fill: #e2e8f0; -fx-border-color: #475569; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 6 12; -fx-cursor: hand;"/>
+                        <Button text="🔄 Recargar Whitelist" onAction="#handleQuickWhitelistReload"
+                                style="-fx-background-color: #1e293b; -fx-text-fill: #e2e8f0; -fx-border-color: #475569; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 6 12; -fx-cursor: hand;"/>
+                    </FlowPane>
+                </VBox>
+            </VBox>
+        </StackPane>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.craftcore.controller.ReportsConfigController"
+      spacing="12" style="-fx-base: #1e293b; -fx-background: #0f172a; -fx-control-inner-background: #0f172a; -fx-accent: #38bdf8; -fx-focus-color: #38bdf8; -fx-background-color: #0f172a;">
+
+    <Label text="Reportes JasperReports y Configuración de Arranque"
+           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #f8fafc;"/>
+
+    <VBox spacing="10" style="-fx-background-color: #111827; -fx-background-radius: 10; -fx-border-color: #1e293b; -fx-border-radius: 10; -fx-padding: 14;">
+        <Label text="Exportación de Reportes (JasperReports)" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #38bdf8;"/>
+        <HBox spacing="12" alignment="CENTER_LEFT">
+            <Label text="Tipo de reporte:" style="-fx-text-fill: #cbd5e1;"/>
+            <ComboBox fx:id="cmbReportType" prefWidth="210"/>
+            <Label text="Desde:" style="-fx-text-fill: #cbd5e1;"/>
+            <DatePicker fx:id="dpReportDesde" prefWidth="130"/>
+            <Label text="Hasta:" style="-fx-text-fill: #cbd5e1;"/>
+            <DatePicker fx:id="dpReportHasta" prefWidth="130"/>
+        </HBox>
+        <HBox spacing="16" alignment="CENTER_LEFT">
+            <Label text="Formato:" style="-fx-text-fill: #cbd5e1;"/>
+            <RadioButton fx:id="rbPdf" text="PDF (.pdf)" selected="true" style="-fx-text-fill: #e2e8f0;">
+                <toggleGroup>
+                    <ToggleGroup fx:id="exportFormatGroup"/>
+                </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="rbExcel" text="Excel (.xlsx)" toggleGroup="$exportFormatGroup" style="-fx-text-fill: #e2e8f0;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Exportar Reporte..." onAction="#handleExportReport"
+                    style="-fx-background-color: #6366f1; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 7 16; -fx-cursor: hand;"/>
+        </HBox>
+    </VBox>
+
+    <VBox spacing="10" VBox.vgrow="ALWAYS"
+          style="-fx-background-color: #111827; -fx-background-radius: 10; -fx-border-color: #1e293b; -fx-border-radius: 10; -fx-padding: 14;">
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Configuración de Arranque (server.properties)" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #10b981;"/>
+            <Label text="(Aplica al iniciar o reiniciar el servidor)" style="-fx-text-fill: #94a3b8; -fx-font-size: 12px;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Recargar" onAction="#loadServerProperties"
+                    style="-fx-background-color: #1e293b; -fx-text-fill: #e2e8f0; -fx-border-color: #475569; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 6 14; -fx-cursor: hand;"/>
+            <Button text="Guardar Cambios" onAction="#handleSaveProperties"
+                    style="-fx-background-color: #10b981; -fx-text-fill: #022c22; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 6 16; -fx-cursor: hand;"/>
+        </HBox>
+
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                    style="-fx-background: #111827; -fx-background-color: #111827; -fx-border-color: transparent;">
+            <GridPane hgap="14" vgap="10" style="-fx-padding: 6; -fx-background-color: #111827;">
+                <columnConstraints>
+                    <ColumnConstraints prefWidth="170"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                    <ColumnConstraints prefWidth="170"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+
+                <Label text="MOTD (Descripción):" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-text-fill: #cbd5e1;"/>
+                <TextField fx:id="txtMotd" promptText="CraftCore Minecraft Server" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="3"
+                           style="-fx-background-color: #0f172a; -fx-text-fill: #f8fafc; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6 10;"/>
+
+                <Label text="Puerto (server-port):" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-text-fill: #cbd5e1;"/>
+                <TextField fx:id="txtPort" promptText="25565" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                           style="-fx-background-color: #0f172a; -fx-text-fill: #f8fafc; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6 10;"/>
+
+                <Label text="Máx. Jugadores:" GridPane.rowIndex="1" GridPane.columnIndex="2" style="-fx-text-fill: #cbd5e1;"/>
+                <TextField fx:id="txtMaxPlayers" promptText="20" GridPane.rowIndex="1" GridPane.columnIndex="3"
+                           style="-fx-background-color: #0f172a; -fx-text-fill: #f8fafc; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6 10;"/>
+
+                <Label text="Nombre del Mundo:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-text-fill: #cbd5e1;"/>
+                <TextField fx:id="txtLevelName" promptText="world" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                           style="-fx-background-color: #0f172a; -fx-text-fill: #f8fafc; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6 10;"/>
+
+                <Label text="Semilla (level-seed):" GridPane.rowIndex="2" GridPane.columnIndex="2" style="-fx-text-fill: #cbd5e1;"/>
+                <TextField fx:id="txtLevelSeed" promptText="Opcional (vacío = aleatoria)" GridPane.rowIndex="2" GridPane.columnIndex="3"
+                           style="-fx-background-color: #0f172a; -fx-text-fill: #f8fafc; -fx-prompt-text-fill: #64748b; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6 10;"/>
+
+                <Label text="Tipo de Mundo:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-text-fill: #cbd5e1;"/>
+                <ComboBox fx:id="cmbLevelType" maxWidth="Infinity" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                <Label text="Modo por Defecto:" GridPane.rowIndex="3" GridPane.columnIndex="2" style="-fx-text-fill: #cbd5e1;"/>
+                <ComboBox fx:id="cmbGamemode" maxWidth="Infinity" GridPane.rowIndex="3" GridPane.columnIndex="3"/>
+
+                <Label text="Dificultad Inicial:" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-text-fill: #cbd5e1;"/>
+                <ComboBox fx:id="cmbDifficulty" maxWidth="Infinity" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                <Label text="Distancia Visión (chunks):" GridPane.rowIndex="4" GridPane.columnIndex="2" style="-fx-text-fill: #cbd5e1;"/>
+                <TextField fx:id="txtViewDistance" promptText="10" GridPane.rowIndex="4" GridPane.columnIndex="3"
+                           style="-fx-background-color: #0f172a; -fx-text-fill: #f8fafc; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6 10;"/>
+
+                <Label text="Distancia Simulación:" GridPane.rowIndex="5" GridPane.columnIndex="0" style="-fx-text-fill: #cbd5e1;"/>
+                <TextField fx:id="txtSimulationDistance" promptText="10" GridPane.rowIndex="5" GridPane.columnIndex="1"
+                           style="-fx-background-color: #0f172a; -fx-text-fill: #f8fafc; -fx-border-color: #334155; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6 10;"/>
+
+                <FlowPane hgap="20" vgap="8" GridPane.rowIndex="6" GridPane.columnIndex="0" GridPane.columnSpan="4" style="-fx-padding: 8 0 0 0;">
+                    <CheckBox fx:id="chkWhitelist" text="Activar Whitelist (white-list)" style="-fx-text-fill: #e2e8f0;"/>
+                    <CheckBox fx:id="chkOnlineMode" text="Modo Premium Mojang (online-mode)" style="-fx-text-fill: #e2e8f0;"/>
+                    <CheckBox fx:id="chkPvp" text="Permitir PvP (pvp)" style="-fx-text-fill: #e2e8f0;"/>
+                    <CheckBox fx:id="chkAllowFlight" text="Permitir Vuelo (allow-flight)" style="-fx-text-fill: #e2e8f0;"/>
+                    <CheckBox fx:id="chkAllowNether" text="Habilitar Nether (allow-nether)" style="-fx-text-fill: #e2e8f0;"/>
+                    <CheckBox fx:id="chkSpawnMonsters" text="Generar Monstruos (spawn-monsters)" style="-fx-text-fill: #e2e8f0;"/>
+                    <CheckBox fx:id="chkSpawnAnimals" text="Generar Animales (spawn-animals)" style="-fx-text-fill: #e2e8f0;"/>
+                    <CheckBox fx:id="chkGenerateStructures" text="Generar Estructuras (aldeas/templos)" style="-fx-text-fill: #e2e8f0;"/>
+                    <CheckBox fx:id="chkHardcore" text="Modo Hardcore (hardcore)" style="-fx-text-fill: #e2e8f0;"/>
+                </FlowPane>
+            </GridPane>
+        </ScrollPane>
+    </VBox>
+
+</VBox>

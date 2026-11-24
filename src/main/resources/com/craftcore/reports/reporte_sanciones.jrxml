@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="reporte_sanciones"
+              pageWidth="595" pageHeight="842"
+              columnWidth="535" leftMargin="30" rightMargin="30" topMargin="25" bottomMargin="25"
+              whenNoDataType="AllSectionsNoDetail">
+
+    <parameter name="P_TITULO" class="java.lang.String"/>
+    <parameter name="P_RANGO_FECHAS" class="java.lang.String"/>
+    <parameter name="P_GENERADO_POR" class="java.lang.String"/>
+    <parameter name="P_TOTAL_REGISTROS" class="java.lang.Integer"/>
+
+    <field name="idSancion" class="java.lang.Integer"/>
+    <field name="jugador" class="java.lang.String"/>
+    <field name="tipo" class="java.lang.String"/>
+    <field name="motivo" class="java.lang.String"/>
+    <field name="estado" class="java.lang.String"/>
+    <field name="operador" class="java.lang.String"/>
+    <field name="fecha" class="java.lang.String"/>
+
+    <title>
+        <band height="78">
+            <rectangle>
+                <reportElement x="0" y="0" width="535" height="70" backcolor="#1E293B" mode="Opaque"/>
+                <graphicElement><pen lineWidth="0"/></graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="14" y="10" width="350" height="22" forecolor="#FFFFFF"/>
+                <textElement><font fontName="SansSerif" size="15" isBold="true"/></textElement>
+                <text><![CDATA[CraftCore Server Studio]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="14" y="34" width="350" height="18" forecolor="#93C5FD"/>
+                <textElement><font fontName="SansSerif" size="11" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$P{P_TITULO}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="365" y="12" width="158" height="16" forecolor="#CBD5E1"/>
+                <textElement textAlignment="Right"><font fontName="SansSerif" size="9"/></textElement>
+                <textFieldExpression><![CDATA[$P{P_RANGO_FECHAS}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="365" y="34" width="158" height="16" forecolor="#CBD5E1"/>
+                <textElement textAlignment="Right"><font fontName="SansSerif" size="9"/></textElement>
+                <textFieldExpression><![CDATA["Generado por: " + $P{P_GENERADO_POR}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <columnHeader>
+        <band height="24">
+            <staticText>
+                <reportElement x="0" y="0" width="35" height="24" mode="Opaque" backcolor="#334155" forecolor="#FFFFFF"/>
+                <box><pen lineWidth="0.5" lineColor="#475569"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle"><font fontName="SansSerif" size="9" isBold="true"/></textElement>
+                <text><![CDATA[ID]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="35" y="0" width="85" height="24" mode="Opaque" backcolor="#334155" forecolor="#FFFFFF"/>
+                <box><pen lineWidth="0.5" lineColor="#475569"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle"><font fontName="SansSerif" size="9" isBold="true"/></textElement>
+                <text><![CDATA[Jugador]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="120" y="0" width="55" height="24" mode="Opaque" backcolor="#334155" forecolor="#FFFFFF"/>
+                <box><pen lineWidth="0.5" lineColor="#475569"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle"><font fontName="SansSerif" size="9" isBold="true"/></textElement>
+                <text><![CDATA[Tipo]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="175" y="0" width="155" height="24" mode="Opaque" backcolor="#334155" forecolor="#FFFFFF"/>
+                <box><pen lineWidth="0.5" lineColor="#475569"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle"><font fontName="SansSerif" size="9" isBold="true"/></textElement>
+                <text><![CDATA[Motivo]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="330" y="0" width="60" height="24" mode="Opaque" backcolor="#334155" forecolor="#FFFFFF"/>
+                <box><pen lineWidth="0.5" lineColor="#475569"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle"><font fontName="SansSerif" size="9" isBold="true"/></textElement>
+                <text><![CDATA[Estado]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="390" y="0" width="65" height="24" mode="Opaque" backcolor="#334155" forecolor="#FFFFFF"/>
+                <box><pen lineWidth="0.5" lineColor="#475569"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle"><font fontName="SansSerif" size="9" isBold="true"/></textElement>
+                <text><![CDATA[Operador]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="455" y="0" width="80" height="24" mode="Opaque" backcolor="#334155" forecolor="#FFFFFF"/>
+                <box><pen lineWidth="0.5" lineColor="#475569"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle"><font fontName="SansSerif" size="9" isBold="true"/></textElement>
+                <text><![CDATA[Fecha]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="22">
+            <textField>
+                <reportElement x="0" y="0" width="35" height="22"/>
+                <box leftPadding="4" rightPadding="4"><pen lineWidth="0.5" lineColor="#CBD5E1"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle"><font fontName="SansSerif" size="8"/></textElement>
+                <textFieldExpression><![CDATA[$F{idSancion}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="35" y="0" width="85" height="22"/>
+                <box leftPadding="4" rightPadding="4"><pen lineWidth="0.5" lineColor="#CBD5E1"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="SansSerif" size="8"/></textElement>
+                <textFieldExpression><![CDATA[$F{jugador}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="120" y="0" width="55" height="22"/>
+                <box leftPadding="4" rightPadding="4"><pen lineWidth="0.5" lineColor="#CBD5E1"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle"><font fontName="SansSerif" size="8" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight">
+                <reportElement x="175" y="0" width="155" height="22"/>
+                <box leftPadding="4" rightPadding="4"><pen lineWidth="0.5" lineColor="#CBD5E1"/></box>
+                <textElement verticalAlignment="Middle"><font fontName="SansSerif" size="8"/></textElement>
+                <textFieldExpression><![CDATA[$F{motivo}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="330" y="0" width="60" height="22"/>
+                <box leftPadding="4" rightPadding="4"><pen lineWidth="0.5" lineColor="#CBD5E1"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle"><font fontName="SansSerif" size="8"/></textElement>
+                <textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="390" y="0" width="65" height="22"/>
+                <box leftPadding="4" rightPadding="4"><pen lineWidth="0.5" lineColor="#CBD5E1"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle"><font fontName="SansSerif" size="8"/></textElement>
+                <textFieldExpression><![CDATA[$F{operador}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="455" y="0" width="80" height="22"/>
+                <box leftPadding="4" rightPadding="4"><pen lineWidth="0.5" lineColor="#CBD5E1"/></box>
+                <textElement textAlignment="Center" verticalAlignment="Middle"><font fontName="SansSerif" size="8"/></textElement>
+                <textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <summary>
+        <band height="30">
+            <textField>
+                <reportElement x="0" y="8" width="535" height="20"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="10" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Total de sanciones registradas: " + $P{P_TOTAL_REGISTROS}]]></textFieldExpression>
+            </textField>
+        </band>
+    </summary>
+</jasperReport>

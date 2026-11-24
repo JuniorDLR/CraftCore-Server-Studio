@@ -1,10 +1,13 @@
 package com.craftcore.app;
 
+import com.craftcore.util.HibernateUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.net.URL;
 
 /**
  * Aplicación principal JavaFX: CraftCore Server Studio.
@@ -18,21 +21,19 @@ public class MainApp extends Application {
     public void start(Stage stage) {
         primaryStage = stage;
         stage.setTitle("CraftCore Server Studio — Panel de Administración");
-        stage.setWidth(1100);
-        stage.setHeight(720);
-        stage.setMinWidth(960);
-        stage.setMinHeight(600);
+        stage.setWidth(1160);
+        stage.setHeight(740);
+        stage.setMinWidth(980);
+        stage.setMinHeight(620);
 
         try {
-            // Intentar cargar la vista del Dashboard principal si existe
-            java.net.URL fxmlLocation = getClass().getResource("/com/craftcore/fxml/DashboardView.fxml");
+            URL fxmlLocation = getClass().getResource("/com/craftcore/fxml/DashboardView.fxml");
             if (fxmlLocation != null) {
                 FXMLLoader loader = new FXMLLoader(fxmlLocation);
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
             } else {
-                // Fallback temporal si aún no se han creado las vistas FXML
                 javafx.scene.layout.StackPane root = new javafx.scene.layout.StackPane();
                 javafx.scene.control.Label placeholder = new javafx.scene.control.Label("CraftCore Server Studio cargando...");
                 root.getChildren().add(placeholder);
@@ -43,6 +44,12 @@ public class MainApp extends Application {
         }
 
         stage.show();
+    }
+
+    @Override
+    public void stop() {
+        AppContext.getInstance().getProcessService().shutdown();
+        HibernateUtil.shutdown();
     }
 
     public static Stage getPrimaryStage() {

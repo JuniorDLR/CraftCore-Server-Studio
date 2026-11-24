@@ -23,6 +23,7 @@ logs/
 ### Minecraft Server Runtime (Archivos generados del servidor de juego) ###
 server_runtime/
 minecraft_server/
+minecraft-server/
 *.jar
 !src/main/resources/**/*.jar
 world/
